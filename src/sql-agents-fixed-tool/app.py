@@ -35,9 +35,9 @@ from token_counter import TokenCounterCallback
 
 dotenv.load_dotenv()
 
-st.set_page_config(
-    page_title="AI agentic bot that can interact with a database"
-)
+# st.set_page_config(
+#     page_title="AI agentic bot that can interact with a database"
+# )
 
 st.title("💬 AI agentic RAG")
 st.caption("🚀 A Bot that can use an agent to retrieve, augment, generate, validate and iterate")

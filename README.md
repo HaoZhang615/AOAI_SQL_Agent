@@ -1,3 +1,5 @@
+### a fork of https://github.com/denniszielke/sql-ai-agents/tree/main
+
 # Talking to a database with a large language model
 
 This project demonstrates different approaches on how to implement a bot that can talk to a relational database using different architecture patterns.

@@ -23,9 +23,9 @@ from azure.monitor.opentelemetry.exporter import AzureMonitorTraceExporter
 from opentelemetry import trace, trace as trace_api
 dotenv.load_dotenv()
 
-st.set_page_config(
-    page_title="AI reactive bot that can interact with a database"
-)
+# st.set_page_config(
+#     page_title="AI reactive bot that can interact with a database"
+# )
 
 @st.cache_resource
 def setup_tracing():

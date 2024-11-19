@@ -21,9 +21,9 @@ from azure.monitor.opentelemetry.exporter import AzureMonitorTraceExporter
 from opentelemetry import trace, trace as trace_api
 from token_counter import TokenCounterCallback
 
-st.set_page_config(
-    page_title="AI bot that can use a database as tools"
-)
+# st.set_page_config(
+#     page_title="AI bot that can use a database as tools"
+# )
 
 @st.cache_resource
 def setup_tracing():
