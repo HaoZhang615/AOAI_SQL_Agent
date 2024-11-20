@@ -116,11 +116,12 @@ else:
         azure_ad_token_provider = token_provider
     )
 
-driver = '{ODBC Driver 18 for SQL Server}'
-odbc_str = 'mssql+pyodbc:///?odbc_connect=' \
-                'Driver='+driver+ \
-                ';' + os.getenv("AZURE_SQL_CONNECTIONSTRING")
-
+driver = db_driver
+odbc_str = (
+    'mssql+pyodbc:///?odbc_connect='
+    'Driver=' + driver +
+    ';' + db_connection_string
+)
 db = SQLDatabase.from_uri(odbc_str)
 
 @st.cache_resource

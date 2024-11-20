@@ -78,10 +78,10 @@ callback = TokenCounterCallback()
 llm: AzureChatOpenAI = None
 if "AZURE_OPENAI_API_KEY" in os.environ:
     llm = AzureChatOpenAI(
-        azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
-        api_key=os.getenv("AZURE_OPENAI_API_KEY"),
-        azure_deployment=os.getenv("AZURE_OPENAI_COMPLETION_DEPLOYMENT_NAME"),
-        openai_api_version=os.getenv("AZURE_OPENAI_VERSION"),
+        azure_endpoint=azure_openai_api_endpoint,
+        api_key=azure_openai_api_key,
+        azure_deployment=azure_openai_completion_deployment_name,
+        openai_api_version=azure_openai_api_version,
         temperature=0,
         streaming=True,
         model_kwargs={"stream_options":{"include_usage": True}},
@@ -101,10 +101,12 @@ else:
         callbacks=[callback]
     )
 
-driver = '{ODBC Driver 18 for SQL Server}'
-odbc_str = 'mssql+pyodbc:///?odbc_connect=' \
-                'Driver='+driver+ \
-                ';' + os.getenv("AZURE_SQL_CONNECTIONSTRING")
+driver = db_driver
+odbc_str = (
+    'mssql+pyodbc:///?odbc_connect='
+    'Driver=' + driver +
+    ';' + db_connection_string
+)
 
 from langchain_community.utilities import SQLDatabase
 

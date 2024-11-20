@@ -75,7 +75,7 @@ if "chat_history" not in st.session_state:
 callback = TokenCounterCallback()
 
 llm: AzureChatOpenAI = None
-if "AZURE_OPENAI_API_KEY" in os.environ:
+if os.getenv("AZURE_OPENAI_API_KEY"):
     llm = AzureChatOpenAI(
         azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
         api_key=os.getenv("AZURE_OPENAI_API_KEY"),
@@ -100,11 +100,12 @@ else:
         callbacks=[callback]
     )
 
-driver = '{ODBC Driver 18 for SQL Server}'
-odbc_str = 'mssql+pyodbc:///?odbc_connect=' \
-                'Driver='+driver+ \
-                ';' + os.getenv("AZURE_SQL_CONNECTIONSTRING")
-
+driver = db_driver
+odbc_str = (
+    'mssql+pyodbc:///?odbc_connect='
+    'Driver=' + driver +
+    ';' + db_connection_string
+)
 db = SQLDatabase.from_uri(odbc_str)
 
 toolkit = SQLDatabaseToolkit(db=db, llm=llm)

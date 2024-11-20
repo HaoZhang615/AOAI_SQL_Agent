@@ -78,7 +78,7 @@ for message in st.session_state.chat_history:
 callback = TokenCounterCallback()
 
 llm: AzureChatOpenAI = None
-if "AZURE_OPENAI_API_KEY" in os.environ:
+if os.getenv("AZURE_OPENAI_API_KEY"):
     llm = AzureChatOpenAI(
         azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
         api_key=os.getenv("AZURE_OPENAI_API_KEY"),
@@ -106,10 +106,12 @@ else:
 
 connection_string = os.environ["AZURE_SQL_CONNECTIONSTRING"]
 
-driver = '{ODBC Driver 18 for SQL Server}'
-odbc_str = 'mssql+pyodbc:///?odbc_connect=' \
-                'Driver='+driver+ \
-                ';' + os.getenv("AZURE_SQL_CONNECTIONSTRING")
+driver = db_driver
+odbc_str = (
+    'mssql+pyodbc:///?odbc_connect='
+    'Driver=' + driver +
+    ';' + db_connection_string
+)
 
 from langchain_community.utilities import SQLDatabase
 

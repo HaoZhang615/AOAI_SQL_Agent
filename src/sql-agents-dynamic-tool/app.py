@@ -75,12 +75,12 @@ if "chat_history" not in st.session_state:
 callback = TokenCounterCallback()
 
 llm: AzureChatOpenAI = None
-if "AZURE_OPENAI_API_KEY" in os.environ:
+if azure_openai_api_key:
     llm = AzureChatOpenAI(
-        azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
-        api_key=os.getenv("AZURE_OPENAI_API_KEY"),
-        azure_deployment=os.getenv("AZURE_OPENAI_COMPLETION_DEPLOYMENT_NAME"),
-        openai_api_version=os.getenv("AZURE_OPENAI_VERSION"),
+        azure_endpoint=azure_openai_api_endpoint,
+        api_key=azure_openai_api_key,
+        azure_deployment=azure_openai_completion_deployment_name,
+        openai_api_version=azure_openai_api_version,
         temperature=0,
         streaming=True,
         model_kwargs={"stream_options":{"include_usage": True}},
@@ -90,9 +90,9 @@ else:
     token_provider = get_bearer_token_provider(DefaultAzureCredential(), "https://cognitiveservices.azure.com/.default")
     llm = AzureChatOpenAI(
         azure_ad_token_provider=token_provider,
-        azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
-        azure_deployment=os.getenv("AZURE_OPENAI_COMPLETION_DEPLOYMENT_NAME"),
-        openai_api_version=os.getenv("AZURE_OPENAI_VERSION"),
+        azure_endpoint=azure_openai_api_endpoint,
+        azure_deployment=azure_openai_completion_deployment_name,
+        openai_api_version=azure_openai_api_version,
         temperature=0,
         openai_api_type="azure_ad",
         streaming=True,
@@ -100,11 +100,12 @@ else:
         callbacks=[callback]
     )
 
-driver = '{ODBC Driver 18 for SQL Server}'
-odbc_str = 'mssql+pyodbc:///?odbc_connect=' \
-                'Driver='+driver+ \
-                ';' + os.getenv("AZURE_SQL_CONNECTIONSTRING")
-
+driver = db_driver
+odbc_str = (
+    'mssql+pyodbc:///?odbc_connect='
+    'Driver=' + driver +
+    ';' + db_connection_string
+)
 db = SQLDatabase.from_uri(odbc_str)
 
 toolkit = SQLDatabaseToolkit(db=db, llm=llm)
